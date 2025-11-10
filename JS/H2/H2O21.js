@@ -21,6 +21,11 @@ var cirkel = {
 
   controleerRaak() {
     afstandMuisCirkel = dist(mouseX,mouseY,this.x,this.y);
+    if (afstandMuisCirkel <= this.straal && mouseIsPressed == true) {
+      this.alpha *= 0.8;
+      this.kiesEenPlek();
+      this.aantalRaak ++; 
+    }
 
   }
 }
@@ -35,7 +40,8 @@ function setup() {
   colorMode(RGB,255,255,255,1);
   frameRate(10);
   textFont("Verdana");
-  textSize(30);
+  textSize(60);
+  stroke('grey');
   cirkel.straal = cirkel.diameter / 2;
   cirkel.kiesEenPlek();
 }
@@ -49,4 +55,5 @@ function draw() {
 
   cirkel.controleerRaak();
   cirkel.teken();
+  text(cirkel.aantalRaak,50,50);
 }

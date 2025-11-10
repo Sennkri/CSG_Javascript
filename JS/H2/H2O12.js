@@ -23,4 +23,8 @@ function draw() {
   
   // straal van de neus is 180
 
+  if() {
+    
+  }
+
 }

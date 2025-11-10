@@ -23,7 +23,7 @@ class Speler {
         this.x = raster.celGrootte*floor((canvas.width/raster.celGrootte)/2);
         this.y = raster.celGrootte*floor((canvas.height/raster.celGrootte)/2);
         this.sprite = sprite;
-        this.hitbox = 10;
+        this.hitbox = 10 * (raster.celGrootte/100);
         this.stapgrootte = raster.celGrootte*stap
     }
 
@@ -32,7 +32,7 @@ class Speler {
             if (
                 this.x > collisionLijst[i].x + raster.xRaster &&
                 this.x - this.hitbox < collisionLijst[i].x + collisionLijst[i].w + raster.xRaster &&
-                this.y >= collisionLijst[i].y + raster.yRaster &&
+                this.y + raster.celGrootte > collisionLijst[i].y + raster.yRaster &&
                 this.y < collisionLijst[i].y + collisionLijst[i].h + raster.yRaster
             ) {
                 return true;
@@ -46,7 +46,7 @@ class Speler {
             if (
                 this.x + raster.celGrootte + this.hitbox > collisionLijst[i].x + raster.xRaster &&
                 this.x + raster.celGrootte + this.hitbox < collisionLijst[i].x + collisionLijst[i].w + raster.xRaster &&
-                this.y >= collisionLijst[i].y + raster.yRaster &&
+                this.y + raster.celGrootte > collisionLijst[i].y + raster.yRaster &&
                 this.y < collisionLijst[i].y + collisionLijst[i].h + raster.yRaster
             ) {
                 return true;
@@ -59,7 +59,7 @@ class Speler {
             if (
                 this.y - this.hitbox > collisionLijst[i].y + raster.yRaster &&
                 this.y - this.hitbox < collisionLijst[i].y + collisionLijst[i].h + raster.yRaster &&
-                this.x >= collisionLijst[i].x + raster.xRaster &&
+                this.x + raster.celGrootte > collisionLijst[i].x + raster.xRaster &&
                 this.x < collisionLijst[i].x + collisionLijst[i].w + raster.xRaster
             ) {
                 return true; 
@@ -73,7 +73,7 @@ class Speler {
             if (
                 this.y + raster.celGrootte + this.hitbox > collisionLijst[i].y + raster.yRaster &&
                 this.y + raster.celGrootte + this.hitbox < collisionLijst[i].y + collisionLijst[i].h + raster.yRaster &&
-                this.x >= collisionLijst[i].x + raster.xRaster &&
+                this.x + raster.celGrootte > collisionLijst[i].x + raster.xRaster &&
                 this.x < collisionLijst[i].x + collisionLijst[i].w + raster.xRaster
             ) {
                 return true; 
@@ -117,24 +117,26 @@ function preload() {
     skyline = loadImage("images/backgrounds/skyline_2.jpg");
     appel = loadImage("images/sprites/appel_1.png");
     jos = loadImage("images/sprites/Jos100px/Jos_0.png");
+    bruno = loadImage("images/Naamloos-1.png");
 }
 
 var collisionObjects = [];
+
 
 function setup() {
     canvas = createCanvas(900,600);
     canvas.parent('processing');
     frameRate(15);
 
-
-    raster = new Raster(32,32,100,skyline);
+    raster = new Raster(32,32,99,skyline);
     speler = new Speler(jos,1);
-    
+
     collisionObjects.push(new collisionObject(appel,6,4,2,2));
     collisionObjects.push(new collisionObject(appel,2,2,1,2));
     collisionObjects.push(new collisionObject(appel,10,3,3,2));
     collisionObjects.push(new collisionObject(jos,9,9,2,5));
-    collisionObjects.push(new collisionObject(jos,9,2,1,1))
+    collisionObjects.push(new collisionObject(jos,9,2,1,1));
+    collisionObjects.push(new collisionObject(bruno, -1, -2, 1, 1));
 }
 
 function draw() {
