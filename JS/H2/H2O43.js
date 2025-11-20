@@ -126,10 +126,10 @@ var collisionObjects = [];
 function setup() {
     canvas = createCanvas(900,600);
     canvas.parent('processing');
-    frameRate(15);
+    frameRate(60);
 
     raster = new Raster(32,32,99,skyline);
-    speler = new Speler(jos,1);
+    speler = new Speler(jos,.125);
 
     collisionObjects.push(new collisionObject(appel,6,4,2,2));
     collisionObjects.push(new collisionObject(appel,2,2,1,2));
