@@ -1,12 +1,20 @@
 class Grid {
-    constructor(r,k,c,bg) {
-        this.aantalRijen = r;
-        this.aantalKolommen = k;
+    constructor(c,bg,st) {
+        this.aantalRijen = null;
+        this.aantalKolommen = null;
         this.celGrootte = c;
-        this.xRaster = 0;
-        this.yRaster = 0;
+        this.x = null;
+        this.y = null;
         this.background = bg;
+        this.step = st;
+        this.width = null;
+        this.height = null;
     }
+
+/*    start(x, y) {
+        this.x += this.celGrootte * x;
+        this.y += this.celGrootte * y;
+    }*/
 
     teken() {
         push();
@@ -14,13 +22,19 @@ class Grid {
         stroke('grey');
         for (var rij = 0;rij < this.aantalRijen;rij++) {
             for (var kolom = 0;kolom < this.aantalKolommen;kolom++) {
-            rect(kolom*this.celGrootte+this.xRaster,rij*this.celGrootte+this.yRaster,this.celGrootte,this.celGrootte);
+            rect(kolom*this.celGrootte+this.x,rij*this.celGrootte+this.y,this.celGrootte,this.celGrootte);
             }
         }
         pop();
     }
 
-    achtergrond() {
-        image(this.background,this.xRaster,this.yRaster,this.aantalKolommen*this.celGrootte,this.aantalRijen*this.celGrootte);
+    achtergrond(k,r) {
+        this.aantalKolommen = k;
+        this.aantalRijen = r;
+
+        this.width = (this.aantalKolommen-1)*this.celGrootte;
+        this.height = (this.aantalRijen-1)*this.celGrootte;
+
+        image(this.background,this.x,this.y,this.aantalKolommen*this.celGrootte,this.aantalRijen*this.celGrootte);
     }
 }

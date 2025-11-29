@@ -117,7 +117,7 @@ function preload() {
     skyline = loadImage("images/backgrounds/skyline_2.jpg");
     appel = loadImage("images/sprites/appel_1.png");
     jos = loadImage("images/sprites/Jos100px/Jos_0.png");
-    bruno = loadImage("images/Naamloos-1.png");
+    bruno = loadImage("images/choco.jpg");
 }
 
 var collisionObjects = [];

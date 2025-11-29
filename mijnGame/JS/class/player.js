@@ -5,11 +5,15 @@ class Player {
         this.y = null;
         this.step = st;
         this.size = si;
+        this.cameraMarginH = null;
+        this.cameraMarginV = null;
     }
 
     start(x, y) {
-        this.x = x
-        this.y = y
+        this.x = x;
+        this.y = y;
+        this.cameraMarginH = 4*this.step*8;
+        this.cameraMarginV = 3*this.step*8;
     }
 
     load() {
