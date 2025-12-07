@@ -1,4 +1,6 @@
 var collisionObjects = [];
+var decorations = [];
+var tiles = [];
 var gridWidth = null;
 var gridHeight = null;
 var bossroom = null;
@@ -7,18 +9,18 @@ var levelCleared = false;
 
 
 function preload() {
-  b1 = loadImage('assets/tiles/tiles1/tilea.png');
+  b1 = loadImage('assets/tiles/tilea.png');
   bruno = loadImage('assets/sprites/bruno/bruno_portrait.png');
   jos = loadImage('assets/sprites/Jos/pixelJos.png');
 
-  wall_1 = loadImage('assets/walls/walls1/cornerUL.png');
-  wall_2 = loadImage('assets/walls/walls1/wallUa.png');
-  wall_3 = loadImage('assets/walls/walls1/cornerUR.png');
-  wall_4 = loadImage('assets/walls/walls1/wallLa.png');
-  wall_5 = loadImage('assets/walls/walls1/wallRa.png');
-  wall_6 = loadImage('assets/walls/walls1/cornerBL.png');
-  wall_7 = loadImage('assets/walls/walls1/wallBa.png');
-  wall_8 = loadImage('assets/walls/walls1/cornerBR.png');
+  wall_1 = loadImage('assets/walls/cornerUL.png');
+  wall_2 = loadImage('assets/walls/wallUa.png');
+  wall_3 = loadImage('assets/walls/cornerUR.png');
+  wall_4 = loadImage('assets/walls/wallLa.png');
+  wall_5 = loadImage('assets/walls/wallRa.png');
+  wall_6 = loadImage('assets/walls/cornerBL.png');
+  wall_7 = loadImage('assets/walls/wallBa.png');
+  wall_8 = loadImage('assets/walls/cornerBR.png');
 
   lvlData = loadJSON('assets/levels.json?v=' + Date.now());
 }
@@ -41,7 +43,7 @@ function draw() {
         levelCleared = true;
     }
     if (keyIsDown(13) && levelCleared) {
-        room = /*Math.floor(Math.random()*4);*/ 4;
+        room = Math.floor(Math.random()*4);;
         grid.x = 0;
         grid.y = 0;
         levelCleared = false;
@@ -117,8 +119,12 @@ function loadRoom(lvl) {
         for (let j=0;j<grid.aantalKolommen;j++) {
             x = j;
             if (layout[i*grid.aantalKolommen + j] != 0) {
-                sprite = "wall_" + layout[i*grid.aantalKolommen + j];
+                sprite = window["wall_" + layout[i*grid.aantalKolommen + j]];
                 collisionObjects.push(new collisionObject(x, y, grid.celGrootte, grid.celGrootte, sprite));
+            }
+            else {
+                sprite = "tile" + String.fromCharCode(97 + Math.floor(Math.random()*4));
+                tiles.push(new decoration(x,y,grid.celGrootte,grid.celGrootte,sprite));
             }
         }
     }
@@ -131,9 +137,10 @@ function newInstance() {
     player.newInstance();
 
     grid.achtergrond(gridWidth,gridHeight);
-    grid.teken();
+//    grid.teken();
 
     collisionObjects.length = 0;
+    tiles.length = 0;
 
     loadRoom(room);
     
