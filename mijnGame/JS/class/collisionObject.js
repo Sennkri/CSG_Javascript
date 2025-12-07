@@ -7,11 +7,11 @@ class collisionObject {
         this.sprite = sprite;
     }
 
-    /*draw(step, gridStep) {
-    image(this.sprite, this.x*step + gridStep, this.y*step + gridStep, this.w, this.h);
-    }*/
-
     draw(step, gridStepX, gridStepY) {
+    image(this.sprite, this.x*step + gridStepX, this.y*step + gridStepY, this.w, this.h);
+    }
+
+/*    draw(step, gridStepX, gridStepY) {
         let colour = null;
 
         if (this.sprite == "wall_1") {
@@ -23,5 +23,5 @@ class collisionObject {
         fill(colour);
         rect(this.x*step + gridStepX, this.y*step + gridStepY, this.w, this.h)
         noStroke();
-    }
+    }*/
 }

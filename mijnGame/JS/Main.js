@@ -1,13 +1,26 @@
 var collisionObjects = [];
 var gridWidth = null;
-var gridHeight = null
+var gridHeight = null;
+var bossroom = null;
+var room = null;
+var levelCleared = false;
+
 
 function preload() {
-  b1 = loadImage('assets/backgrounds/bg1.png');
+  b1 = loadImage('assets/tiles/tiles1/tilea.png');
   bruno = loadImage('assets/sprites/bruno/bruno_portrait.png');
   jos = loadImage('assets/sprites/Jos/pixelJos.png');
 
-  lvlData = loadJSON('assets/levels.json');
+  wall_1 = loadImage('assets/walls/walls1/cornerUL.png');
+  wall_2 = loadImage('assets/walls/walls1/wallUa.png');
+  wall_3 = loadImage('assets/walls/walls1/cornerUR.png');
+  wall_4 = loadImage('assets/walls/walls1/wallLa.png');
+  wall_5 = loadImage('assets/walls/walls1/wallRa.png');
+  wall_6 = loadImage('assets/walls/walls1/cornerBL.png');
+  wall_7 = loadImage('assets/walls/walls1/wallBa.png');
+  wall_8 = loadImage('assets/walls/walls1/cornerBR.png');
+
+  lvlData = loadJSON('assets/levels.json?v=' + Date.now());
 }
 
 function setup() {
@@ -15,29 +28,27 @@ function setup() {
     let cnv = createCanvas(900,700);
     cnv.position(windowWidth/2 - cnv.width/2, windowHeight/2 - cnv.height/2);
 
-    grid = new Grid(100, b1, 100/8);
-    player = new Player(bruno, grid.celGrootte/8, grid.celGrootte);
+    grid = new Grid(100, b1);
+    player = new Player(bruno, grid.celGrootte);
 
-    player.start(2*grid.celGrootte, 2*grid.celGrootte);
-//    Josgoon = new enemy(grid.x + 500,grid.y + 500);
+    player.start(4*grid.celGrootte, 3*grid.celGrootte);
+    room = 0; 
 }
 
 function draw() {
-    background("green"); 
-    move()
-
-    levelSize("0");
-
-    grid.achtergrond(gridWidth,gridHeight);
-    grid.teken();
-
-    loadLevel("0");
-
-    for(var b = 0; b < collisionObjects.length ; b++) {
-        collisionObjects[b].draw(100,0,0);
+    move();
+    if (keyIsDown(32) && !levelCleared) {
+        levelCleared = true;
     }
-
-//    Josgoon.tekenEnemy();
+    if (keyIsDown(13) && levelCleared) {
+        room = /*Math.floor(Math.random()*4);*/ 4;
+        grid.x = 0;
+        grid.y = 0;
+        levelCleared = false;
+        newInstance();
+        player.start(4*grid.celGrootte, 3*grid.celGrootte);
+    }
+    newInstance();
     player.load();
 }
 
@@ -79,27 +90,54 @@ function move() {
     }
 }
 
-function levelSize(lvl) {
+function roomSize(lvl) {
     gridWidth = lvlData['levels'][lvl]['size']['x']
     gridHeight = lvlData['levels'][lvl]['size']['y']
 
+    bossroom = lvlData['levels'][lvl]['bossroom'];
+    if (bossroom) {
+        grid.celGrootte = 50;
+        player.size = 50;
+    }
+    else {
+        grid.celGrootte = 100;
+        player.size = 100;
+    }
 }
 
-function loadLevel(lvl) {
+function loadRoom(lvl) {
     let x,y,sprite,layout
     layout = lvlData['levels'][lvl]['layout'];
     x = null;
     y = null;
     sprite = null;
 
-    for (let i=0; i<layout['length']/grid.aantalKolommen; i++) {
+    for (let i=0; i<floor(layout['length']/grid.aantalKolommen); i++) {
         y = i; 
         for (let j=0;j<grid.aantalKolommen;j++) {
             x = j;
-            sprite = "wall_" + layout[i*grid.aantalKolommen + j];
-            if (sprite !== "wall_0") {
+            if (layout[i*grid.aantalKolommen + j] != 0) {
+                sprite = "wall_" + layout[i*grid.aantalKolommen + j];
                 collisionObjects.push(new collisionObject(x, y, grid.celGrootte, grid.celGrootte, sprite));
             }
         }
+    }
+}
+
+function newInstance() {
+    roomSize(room);
+
+    grid.newInstance();
+    player.newInstance();
+
+    grid.achtergrond(gridWidth,gridHeight);
+    grid.teken();
+
+    collisionObjects.length = 0;
+
+    loadRoom(room);
+    
+    for(var b = 0; b < collisionObjects.length ; b++) {
+        collisionObjects[b].draw(grid.celGrootte,grid.x,grid.y);
     }
 }

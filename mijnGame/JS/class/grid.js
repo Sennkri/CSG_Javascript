@@ -1,20 +1,24 @@
 class Grid {
-    constructor(c,bg,st) {
+    constructor(c,bg) {
         this.aantalRijen = null;
         this.aantalKolommen = null;
         this.celGrootte = c;
         this.x = null;
         this.y = null;
         this.background = bg;
-        this.step = st;
+        this.step = c/8;
         this.width = null;
         this.height = null;
     }
 
-/*    start(x, y) {
+    start(x, y) {
         this.x += this.celGrootte * x;
         this.y += this.celGrootte * y;
-    }*/
+    }
+
+    newInstance() {
+        this.step = this.celGrootte/8;
+    }
 
     teken() {
         push();
