@@ -6,4 +6,10 @@ class decoration {
         this.height = h;
         this.sprite = sprite;
     }
+
+ draw(step, gridStepX, gridStepY) {
+    image(this.sprite, this.x*step + gridStepX, this.y*step + gridStepY, this.width, this.height);
+    }
 }
+
+
