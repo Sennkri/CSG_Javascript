@@ -6,6 +6,8 @@ var gridHeight = null;
 var bossroom = null;
 var room = null;
 var instanceCleared = false;
+var startCellX = 1;
+var startCellY = 1;
 
 function setup() {
     frameRate(60);
@@ -17,9 +19,8 @@ function setup() {
     grid = new Grid(100, b1);
     player = new Player(bruno, grid.celGrootte);
 
-
-    player.start(4*grid.celGrootte, 3*grid.celGrootte);
-    room = 0; 
+    player.start(startCellX*grid.celGrootte, startCellY*grid.celGrootte);
+    room = 1; 
 
     newInstance();
 }
@@ -30,7 +31,7 @@ function draw() {
         instanceCleared = true;
     }
     if (keyIsDown(13) && instanceCleared) {
-        room = Math.floor(Math.random()*4);;
+        room = Math.floor(Math.random()*lvlData['levels']['length']);
         newInstance();
     }
     drawInstance();
@@ -120,11 +121,12 @@ function loadRoom(lvl) {
 
 function newInstance() {
     instanceCleared = false;
-    player.start(4*grid.celGrootte, 3*grid.celGrootte);
 
     roomSize(room);
-    grid.x = 0 + grid.celGrootte/2;
-    grid.y = 0 + grid.celGrootte/2;
+    let imageOffset = grid.celGrootte/2
+    grid.x = imageOffset;
+    grid.y = imageOffset;
+    player.start(startCellX*grid.celGrootte + imageOffset, startCellY*grid.celGrootte + imageOffset);
 
     grid.newInstance();
     player.newInstance();
@@ -134,8 +136,42 @@ function newInstance() {
 
     collisionObjects.length = 0;
     tiles.length = 0;
-
     loadRoom(room);
+    startPos(Math.floor(gridWidth/2),Math.floor(gridHeight/2),imageOffset);
+
+    imgFilter();
+}
+
+function startPos(x,y,imOf) {
+    // x
+    if (x*grid.celGrootte > player.cameraMarginH) {
+        if(x*grid.celGrootte > grid.width-player.cameraMarginH) {
+            player.x = 2*player.cameraMarginH + grid.celGrootte*(x-1) - grid.width + imOf;
+            grid.x =- (grid.width - 2*player.cameraMarginH) + imOf;
+        }
+        else {
+            player.x = player.cameraMarginH + imOf;
+            grid.x =- (x*grid.celGrootte - player.cameraMarginH) + imOf;
+        }
+    }
+    else {
+        player.x = x*grid.celGrootte + imOf;
+    }
+
+    // y 
+        if (y*grid.celGrootte > player.cameraMarginV) {
+        if(y*grid.celGrootte > grid.height-player.cameraMarginV) {
+            player.y = 2*player.cameraMarginV + grid.celGrootte*(y-1) - grid.height + imOf;
+            grid.y =- (grid.height - 2*player.cameraMarginV) + imOf;
+        }
+        else {
+            player.y = player.cameraMarginV + imOf;
+            grid.y =- (y*grid.celGrootte - player.cameraMarginV) + imOf;
+        }
+    }
+    else {
+        player.y = y*grid.celGrootte + imOf;
+    }
 }
 
 function drawInstance() {

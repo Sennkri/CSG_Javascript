@@ -11,11 +11,6 @@ class Grid {
         this.height = null;
     }
 
-    start(x, y) {
-        this.x += this.celGrootte * x;
-        this.y += this.celGrootte * y;
-    }
-
     newInstance() {
         this.step = this.celGrootte/8;
     }

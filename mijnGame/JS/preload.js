@@ -1,3 +1,5 @@
+var imgList = [];
+
 function preload() {
   b1 = loadImage('assets/tiles/tilea.png');
   bruno = loadImage('assets/sprites/bruno/bruno_portrait.png');
@@ -25,4 +27,13 @@ function preload() {
   tiled = loadImage('assets/tiles/tiled.png');
 
   lvlData = loadJSON('assets/levels.json?v=' + Date.now());
+}
+
+function imgFilter(type) {
+  imgList.length = 0;
+  imgList.push(wall_1,wall_2a,wall_2b,wall_3,wall_4a,wall_4b,wall_5a,wall_5b,wall_6,wall_7a,wall_7b,wall_8,tilea,tileb,tilec,tiled)
+
+  for(var i=0;i<imgList.length;i++) {
+    imgList[i].filter(OPAQUE);
+  }
 }
