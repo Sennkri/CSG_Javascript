@@ -14,7 +14,7 @@ function setup() {
     let cnv = createCanvas(900,700);
     cnv.position(windowWidth/2 - cnv.width/2, windowHeight/2 - cnv.height/2);
 
-    imageMode(CENTER)
+    imageMode(CORNER)
 
     grid = new Grid(100, b1);
     player = new Player(bruno, grid.celGrootte);
@@ -39,7 +39,7 @@ function draw() {
 }
 
 function move() {
-    if (keyIsDown(65)) {
+    if (keyIsDown(65) && !player.checkCollisionL(grid.celGrootte,grid.x,grid.y)) {
         if (grid.x < player.x - player.cameraMarginH && grid.x + grid.width >= player.x + player.cameraMarginH) {
             grid.x += grid.step;
         }
@@ -48,7 +48,7 @@ function move() {
         }
     }
 
-    if (keyIsDown(68)) {
+    if (keyIsDown(68) && !player.checkCollisionR(grid.celGrootte,grid.x,grid.y)) {
         if (grid.x + grid.width > player.x + player.cameraMarginH && grid.x <= player.x - player.cameraMarginH) {
             grid.x -= grid.step;
         }
@@ -57,7 +57,7 @@ function move() {
         }
     }
 
-    if (keyIsDown(87)) {
+    if (keyIsDown(87) && !player.checkCollisionU(grid.celGrootte,grid.x,grid.y)) {
         if (grid.y < player.y - player.cameraMarginV && grid.y + grid.height >= player.y + player.cameraMarginV) {
             grid.y += grid.step;
         }
@@ -66,7 +66,7 @@ function move() {
         }
     }
 
-    if (keyIsDown(83)) {
+    if (keyIsDown(83) && !player.checkCollisionD(grid.celGrootte,grid.x,grid.y)) {
         if (grid.y + grid.height > player.y + player.cameraMarginV && grid.y <= player.y - player.cameraMarginV) {
             grid.y -= grid.step;
         }
@@ -97,7 +97,6 @@ function loadRoom(lvl) {
     x = null;
     y = null;
     sprite = null;
-
     for (let i=0; i<floor(layout['length']/grid.aantalKolommen); i++) {
         y = i; 
         for (let j=0;j<grid.aantalKolommen;j++) {
@@ -123,10 +122,9 @@ function newInstance() {
     instanceCleared = false;
 
     roomSize(room);
-    let imageOffset = grid.celGrootte/2
-    grid.x = imageOffset;
-    grid.y = imageOffset;
-    player.start(startCellX*grid.celGrootte + imageOffset, startCellY*grid.celGrootte + imageOffset);
+    grid.x = 0;
+    grid.y = 0;
+    player.start(startCellX*grid.celGrootte, startCellY*grid.celGrootte);
 
     grid.newInstance();
     player.newInstance();
@@ -137,49 +135,49 @@ function newInstance() {
     collisionObjects.length = 0;
     tiles.length = 0;
     loadRoom(room);
-    startPos(Math.floor(gridWidth/2),Math.floor(gridHeight/2),imageOffset);
+    startPos(Math.floor(gridWidth/2),Math.floor(gridHeight/2));
 
     imgFilter();
 }
 
-function startPos(x,y,imOf) {
+function startPos(x,y) {
     // x
     if (x*grid.celGrootte > player.cameraMarginH) {
         if(x*grid.celGrootte > grid.width-player.cameraMarginH) {
-            player.x = 2*player.cameraMarginH + grid.celGrootte*(x-1) - grid.width + imOf;
-            grid.x =- (grid.width - 2*player.cameraMarginH) + imOf;
+            player.x = 2*player.cameraMarginH + grid.celGrootte*(x-1) - grid.width;
+            grid.x =- (grid.width - 2*player.cameraMarginH);
         }
         else {
-            player.x = player.cameraMarginH + imOf;
-            grid.x =- (x*grid.celGrootte - player.cameraMarginH) + imOf;
+            player.x = player.cameraMarginH;
+            grid.x =- (x*grid.celGrootte - player.cameraMarginH);
         }
     }
     else {
-        player.x = x*grid.celGrootte + imOf;
+        player.x = x*grid.celGrootte;
     }
 
     // y 
         if (y*grid.celGrootte > player.cameraMarginV) {
         if(y*grid.celGrootte > grid.height-player.cameraMarginV) {
-            player.y = 2*player.cameraMarginV + grid.celGrootte*(y-1) - grid.height + imOf;
-            grid.y =- (grid.height - 2*player.cameraMarginV) + imOf;
+            player.y = 2*player.cameraMarginV + grid.celGrootte*(y-1) - grid.height;
+            grid.y =- (grid.height - 2*player.cameraMarginV);
         }
         else {
-            player.y = player.cameraMarginV + imOf;
-            grid.y =- (y*grid.celGrootte - player.cameraMarginV) + imOf;
+            player.y = player.cameraMarginV;
+            grid.y =- (y*grid.celGrootte - player.cameraMarginV);
         }
     }
     else {
-        player.y = y*grid.celGrootte + imOf;
+        player.y = y*grid.celGrootte;
     }
 }
 
 function drawInstance() {
     grid.achtergrond(gridWidth,gridHeight);
-    for(var b = 0; b < collisionObjects.length ; b++) {
-        collisionObjects[b].draw(grid.celGrootte,grid.x,grid.y);
-    }
     for(var i = 0; i < tiles.length ; i++) {
         tiles[i].draw(grid.celGrootte,grid.x,grid.y);
+    }
+    for(var b = 0; b < collisionObjects.length ; b++) {
+        collisionObjects[b].draw(grid.celGrootte,grid.x,grid.y);
     }
 }
