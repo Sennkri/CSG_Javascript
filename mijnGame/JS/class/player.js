@@ -8,6 +8,11 @@ class Player {
         this.cameraMarginH = null;
         this.cameraMarginV = null;
         this.hitMargin = 5;
+        
+        this.doorU = false;
+        this.doorL = false;
+        this.doorR = false;
+        this.doorD = false;
     }
 
     start(x, y) {
@@ -40,9 +45,16 @@ class Player {
                 this.x-this.size<s*collisionObjects[i].x + x+(collisionObjects[i].w-s) &&
                 this.x>s*collisionObjects[i].x + x - collisionObjects[i].w+(collisionObjects[i].w-s)
              ) {
+                if (collisionObjects[i].isDoor) {
+                    this.doorU = true;
+                }
+                else {
+                    this.doorU = false;
+                }
                 return true;
              }
         }
+        this.doorU = false;
         return false;
     }
 
@@ -53,9 +65,16 @@ class Player {
                 this.y-this.size<s*collisionObjects[i].y + y+(collisionObjects[i].h-s) &&
                 this.y>s*collisionObjects[i].y + y - collisionObjects[i].h+(collisionObjects[i].h-s)
              ) {
+                if (collisionObjects[i].isDoor) {
+                    this.doorL = true;
+                }
+                else {
+                    this.doorL = false;
+                }
                 return true;
              }
         }
+        this.doorL = false;
         return false;
     }
 
@@ -66,9 +85,16 @@ class Player {
                 this.x-this.size<s*collisionObjects[i].x + x+(collisionObjects[i].w-s) &&
                 this.x>s*collisionObjects[i].x + x - collisionObjects[i].w+(collisionObjects[i].w-s)
              ) {
+                if (collisionObjects[i].isDoor) {
+                    this.doorD = true;
+                }
+                else {
+                    this.doorD = false;
+                }
                 return true;
              }
         }
+        this.doorD = false;
         return false;
     }
 
@@ -79,9 +105,16 @@ class Player {
                 this.y-this.size<s*collisionObjects[i].y + y+(collisionObjects[i].h-s) &&
                 this.y>s*collisionObjects[i].y + y - collisionObjects[i].h+(collisionObjects[i].h-s)
              ) {
+                if (collisionObjects[i].isDoor) {
+                    this.doorR = true;
+                }
+                else {
+                    this.doorR = false;
+                }
                 return true;
              }
         }
+        this.doorR = false;
         return false;
     }
 

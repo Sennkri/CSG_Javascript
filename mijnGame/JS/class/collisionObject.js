@@ -1,10 +1,11 @@
 class collisionObject {
-    constructor(x,y,w,h,sprite) {
+    constructor(x,y,w,h,sprite,isDoor) {
         this.x = x; 
         this.y = y;
         this.w = w;
         this.h = h;
         this.sprite = sprite;
+        this.isDoor = isDoor;
     }
 
     draw(step, gridStepX, gridStepY) {

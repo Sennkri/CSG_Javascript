@@ -1,7 +1,7 @@
 var imgList = [];
+var logoAnim = [];
 
 function preload() {
-  b1 = loadImage('assets/tiles/tilea.png');
   bruno = loadImage('assets/sprites/bruno/bruno_portrait.png');
   jos = loadImage('assets/sprites/Jos/pixelJos.png');
 
@@ -26,14 +26,28 @@ function preload() {
   tilec = loadImage('assets/tiles/tilec.png');
   tiled = loadImage('assets/tiles/tiled.png');
 
-  lvlData = loadJSON('assets/levels.json?v=' + Date.now());
-}
+// doors
+  door_d1 = loadImage('assets/doors/doorU.png');
+  door_d2 = loadImage('assets/doors/doorL.png');
+  door_d3 = loadImage('assets/doors/doorR.png');
+  door_d4 = loadImage('assets/doors/doorD.png');
 
-function imgFilter(type) {
-  imgList.length = 0;
-  imgList.push(wall_1,wall_2a,wall_2b,wall_3,wall_4a,wall_4b,wall_5a,wall_5b,wall_6,wall_7a,wall_7b,wall_8,tilea,tileb,tilec,tiled)
-
-  for(var i=0;i<imgList.length;i++) {
-    imgList[i].filter(OPAQUE);
+// startscreen and logo (animated)
+  startscreen = loadImage('assets/startscreen/startscreen.png');
+  for (let i=0;i<12;i++) {
+    frame = loadImage('assets/startscreen/logo/logo_'+i+'.png');
+    logoAnim.push(frame);
   }
+  pFont = loadFont('assets/Tiny5-Regular.ttf')
+
+
+// levels
+  lvlData = loadJSON('assets/levels.json?v=' + Date.now());
+
+// sounds
+  soundFormats('mp3')
+  room1 = loadSound('assets/sounds/music/room');
+  room2 = loadSound('assets/sounds/music/room2');
+  room3 = loadSound('assets/sounds/music/room3');
+  ambience1 = loadSound('assets/sounds/startscreen');
 }
