@@ -1,10 +1,10 @@
 class Player {
-    constructor(sprite,si,grid) {
+    constructor(sprite,grid) {
         this.sprite = sprite;
         this.x = null;
         this.y = null;
-        this.step = si/8;
-        this.size = si;
+        this.step = this.size/8;
+        this.size = grid.celGrootte;
         this.cameraMarginH = null;
         this.cameraMarginV = null;
         this.hitMargin = 5;

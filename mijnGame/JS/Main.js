@@ -14,7 +14,7 @@ function setup() {
     imgFilter(OPAQUE);
 
     grid = new Grid(100,startscreen);
-    player = new Player(bruno, grid.celGrootte,grid);
+    player = new Player(bruno,grid);
 
     game = new BrunosKerker(player);
 
