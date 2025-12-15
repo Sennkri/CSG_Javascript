@@ -1,5 +1,5 @@
 var collisionObjects = [];
-var instnaceOrder = [0,0,0,1,2,3,4];
+var instnaceOrder = [0,1,1,2,3,4];
 var decorations = [];
 var tiles = [];
 var gridWidth = null;
@@ -14,6 +14,8 @@ var initialised = false;
 var instanceInList = 0;
 var difficulty = 0;
 var logoFrame = 0;
+var creditScreen = false;
+var creditY = 500;
 
 function setup() {
     frameRate(60);
@@ -41,8 +43,11 @@ function setup() {
 }
 
 function draw() {
-    if (initialised) {
+    if (initialised && !creditScreen) {
         move();
+        window["room" + difficulty].setVolume(0.3);
+        window["room" + difficulty].playMode('untilDone');
+        window["room" + difficulty].play();
         if (keyIsDown(32) && !instanceCleared) {
             instanceCleared = true;
             instanceInList ++;
@@ -50,7 +55,12 @@ function draw() {
         if ((keyIsDown(13) && instanceCleared)||(instanceCleared && doorCollisionCheck())) {
             if (instanceInList >= instnaceOrder.length) {
                 instanceInList = 0;
+                window["room" + difficulty].stop();
                 difficulty++;
+                if (difficulty >=3) {
+                    initialised = false;
+                    creditScreen = true;
+                }
             }
             room = instnaceOrder[instanceInList];
             newInstance();
@@ -58,6 +68,13 @@ function draw() {
         drawInstance();
         player.load();
     }
+
+    else if (!initialised && creditScreen) {
+        background(0);
+        text(credits.join('\n'),450,creditY);
+        creditY--;
+    }
+
     else {
         ambience1.setVolume(0.3)
         ambience1.playMode('untilDone');
@@ -67,7 +84,7 @@ function draw() {
             logoFrame = 0;
         }
         image(logoAnim[Math.floor(logoFrame)],450-225,50,450,350);
-        text('Controls:\nW,A,S,D om te bewegen\nLinker Muisknop om te Schieten\n\n\nDruk op Enter om te beginnen',450,500)
+        text('Controls:\nW,A,S,D om te bewegen\nLinker Muisknop om te Schieten\n\n\n\nDruk op Enter om te beginnen',450,450)
         if (keyIsDown(13)) {
             ambience1.stop();
             initialised = true;

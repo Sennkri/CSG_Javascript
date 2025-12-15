@@ -46,8 +46,11 @@ function preload() {
 
 // sounds
   soundFormats('mp3')
-  room1 = loadSound('assets/sounds/music/room');
-  room2 = loadSound('assets/sounds/music/room2');
-  room3 = loadSound('assets/sounds/music/room3');
+  room0 = loadSound('assets/sounds/music/room');
+  room1 = loadSound('assets/sounds/music/room2');
+  room2 = loadSound('assets/sounds/music/room3');
   ambience1 = loadSound('assets/sounds/startscreen');
+
+// strings
+  credits = loadStrings('assets/credits.txt');
 }
