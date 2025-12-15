@@ -9,6 +9,10 @@ class Grid {
         this.step = c/8;
         this.width = null;
         this.height = null;
+
+        this.decorations = [];
+        this.tiles = [];
+        this.collisionObjects = [];
     }
 
     newInstance() {
@@ -35,5 +39,39 @@ class Grid {
         this.height = (this.aantalRijen-1)*this.celGrootte;
 
         image(this.background,this.x,this.y,this.aantalKolommen*this.celGrootte,this.aantalRijen*this.celGrootte);
+    }
+
+    loadRoom(lvl) {
+        let x,y,sprite,layout,isDoor
+        layout = lvlData['levels'][lvl]['layout'];
+        x = null;
+        y = null;
+        sprite = null;
+        isDoor = null;
+        for (let i=0; i<floor(layout['length']/this.aantalKolommen); i++) {
+            y = i; 
+            for (let j=0;j<this.aantalKolommen;j++) {
+                x = j;
+                if (layout[i*this.aantalKolommen + j] != 0) {
+                    if ([1,3,6,8].includes(layout[i*this.aantalKolommen + j])) {
+                        sprite = window["wall_" + layout[i*this.aantalKolommen + j]];
+                        isDoor = false;
+                    }
+                    else if (["d1","d2","d3","d4"].includes(layout[i*this.aantalKolommen + j])) {
+                        sprite = window["door_" + layout[i*this.aantalKolommen + j]]
+                        isDoor = true;
+                    }
+                    else {
+                        sprite = window["wall_" + layout[i*this.aantalKolommen + j] + String.fromCharCode(97 + Math.floor(Math.random()*2))];
+                        isDoor = false;
+                    }
+                    this.collisionObjects.push(new collisionObject(x, y, this.celGrootte, this.celGrootte, sprite, isDoor));
+                }
+                else {
+                    sprite = window["tile" + String.fromCharCode(97 + Math.floor(Math.random()*4))];
+                    this.tiles.push(new collisionObject(x,y,this.celGrootte,this.celGrootte,sprite));
+                }
+            }
+        }
     }
 }

@@ -1,5 +1,5 @@
 class Player {
-    constructor(sprite,si) {
+    constructor(sprite,si,grid) {
         this.sprite = sprite;
         this.x = null;
         this.y = null;
@@ -9,10 +9,14 @@ class Player {
         this.cameraMarginV = null;
         this.hitMargin = 5;
         
+        this.recentDoor = "down";
+
         this.doorU = false;
         this.doorL = false;
         this.doorR = false;
         this.doorD = false;
+
+        this.grid = grid;
     }
 
     start(x, y) {
@@ -24,28 +28,28 @@ class Player {
         image(this.sprite, this.x, this.y, this.size, this.size);
     }
 
-    newInstance() {
+    newInstance(bs) {
         this.step = this.size/8;
 
-        if (!bossroom)  {
+        if (!bs)  {
             this.cameraMarginH = 4*this.size;
             this.cameraMarginV = 3*this.size;
         }
         
-        if (bossroom) {
+        else {
             this.cameraMarginH = 8.5*this.size;
             this.cameraMarginV = 6.5*this.size;
         }
     }
 
     checkCollisionU(s,x,y) {
-        for (var i=0;i<collisionObjects.length;i++) {
-            if (this.y-this.size-this.hitMargin<s*collisionObjects[i].y + y+(collisionObjects[i].h-s) &&
-                this.y-this.hitMargin>s*collisionObjects[i].y + y - collisionObjects[i].h+(collisionObjects[i].h-s) &&
-                this.x-this.size<s*collisionObjects[i].x + x+(collisionObjects[i].w-s) &&
-                this.x>s*collisionObjects[i].x + x - collisionObjects[i].w+(collisionObjects[i].w-s)
+        for (var i=0;i<this.grid.collisionObjects.length;i++) {
+            if (this.y-this.size-this.hitMargin<s*this.grid.collisionObjects[i].y + y+(this.grid.collisionObjects[i].h-s) &&
+                this.y-this.hitMargin>s*this.grid.collisionObjects[i].y + y - this.grid.collisionObjects[i].h+(this.grid.collisionObjects[i].h-s) &&
+                this.x-this.size<s*this.grid.collisionObjects[i].x + x+(this.grid.collisionObjects[i].w-s) &&
+                this.x>s*this.grid.collisionObjects[i].x + x - this.grid.collisionObjects[i].w+(this.grid.collisionObjects[i].w-s)
              ) {
-                if (collisionObjects[i].isDoor) {
+                if (this.grid.collisionObjects[i].isDoor) {
                     this.doorU = true;
                 }
                 else {
@@ -59,13 +63,13 @@ class Player {
     }
 
     checkCollisionL(s,x,y) {
-        for (var i=0;i<collisionObjects.length;i++) {
-            if (this.x-this.size-this.hitMargin<s*collisionObjects[i].x + x+(collisionObjects[i].w-s) &&
-                this.x-this.hitMargin>s*collisionObjects[i].x + x - collisionObjects[i].w+(collisionObjects[i].w-s) &&
-                this.y-this.size<s*collisionObjects[i].y + y+(collisionObjects[i].h-s) &&
-                this.y>s*collisionObjects[i].y + y - collisionObjects[i].h+(collisionObjects[i].h-s)
+        for (var i=0;i<this.grid.collisionObjects.length;i++) {
+            if (this.x-this.size-this.hitMargin<s*this.grid.collisionObjects[i].x + x+(this.grid.collisionObjects[i].w-s) &&
+                this.x-this.hitMargin>s*this.grid.collisionObjects[i].x + x - this.grid.collisionObjects[i].w+(this.grid.collisionObjects[i].w-s) &&
+                this.y-this.size<s*this.grid.collisionObjects[i].y + y+(this.grid.collisionObjects[i].h-s) &&
+                this.y>s*this.grid.collisionObjects[i].y + y - this.grid.collisionObjects[i].h+(this.grid.collisionObjects[i].h-s)
              ) {
-                if (collisionObjects[i].isDoor) {
+                if (this.grid.collisionObjects[i].isDoor) {
                     this.doorL = true;
                 }
                 else {
@@ -79,13 +83,13 @@ class Player {
     }
 
     checkCollisionD(s,x,y) {
-        for (var i=0;i<collisionObjects.length;i++) {
-            if (this.y-this.size+this.hitMargin<s*collisionObjects[i].y + y+(collisionObjects[i].h-s) &&
-                this.y+this.hitMargin>s*collisionObjects[i].y + y - collisionObjects[i].h+(collisionObjects[i].h-s) &&
-                this.x-this.size<s*collisionObjects[i].x + x+(collisionObjects[i].w-s) &&
-                this.x>s*collisionObjects[i].x + x - collisionObjects[i].w+(collisionObjects[i].w-s)
+        for (var i=0;i<this.grid.collisionObjects.length;i++) {
+            if (this.y-this.size+this.hitMargin<s*this.grid.collisionObjects[i].y + y+(this.grid.collisionObjects[i].h-s) &&
+                this.y+this.hitMargin>s*this.grid.collisionObjects[i].y + y - this.grid.collisionObjects[i].h+(this.grid.collisionObjects[i].h-s) &&
+                this.x-this.size<s*this.grid.collisionObjects[i].x + x+(this.grid.collisionObjects[i].w-s) &&
+                this.x>s*this.grid.collisionObjects[i].x + x - this.grid.collisionObjects[i].w+(this.grid.collisionObjects[i].w-s)
              ) {
-                if (collisionObjects[i].isDoor) {
+                if (this.grid.collisionObjects[i].isDoor) {
                     this.doorD = true;
                 }
                 else {
@@ -99,13 +103,13 @@ class Player {
     }
 
     checkCollisionR(s,x,y) {
-        for (var i=0;i<collisionObjects.length;i++) {
-            if (this.x-this.size+this.hitMargin<s*collisionObjects[i].x + x+(collisionObjects[i].w-s) &&
-                this.x+this.hitMargin>s*collisionObjects[i].x + x - collisionObjects[i].w+(collisionObjects[i].w-s) &&
-                this.y-this.size<s*collisionObjects[i].y + y+(collisionObjects[i].h-s) &&
-                this.y>s*collisionObjects[i].y + y - collisionObjects[i].h+(collisionObjects[i].h-s)
+        for (var i=0;i<this.grid.collisionObjects.length;i++) {
+            if (this.x-this.size+this.hitMargin<s*this.grid.collisionObjects[i].x + x+(this.grid.collisionObjects[i].w-s) &&
+                this.x+this.hitMargin>s*this.grid.collisionObjects[i].x + x - this.grid.collisionObjects[i].w+(this.grid.collisionObjects[i].w-s) &&
+                this.y-this.size<s*this.grid.collisionObjects[i].y + y+(this.grid.collisionObjects[i].h-s) &&
+                this.y>s*this.grid.collisionObjects[i].y + y - this.grid.collisionObjects[i].h+(this.grid.collisionObjects[i].h-s)
              ) {
-                if (collisionObjects[i].isDoor) {
+                if (this.grid.collisionObjects[i].isDoor) {
                     this.doorR = true;
                 }
                 else {
@@ -118,4 +122,22 @@ class Player {
         return false;
     }
 
+    doorCollisionCheck() {
+        if (this.doorU) {
+            this.recentDoor = "down";
+            return true;
+        }
+        if (this.doorL) {
+            this.recentDoor = "right";
+            return true;
+        }
+        if (this.doorR) {
+            this.recentDoor = "left";
+            return true;
+        }
+        if (this.doorD) {
+            this.recentDoor = "up";
+            return true;
+        }
+    }
 }
