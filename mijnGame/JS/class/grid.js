@@ -13,6 +13,7 @@ class Grid {
         this.decorations = [];
         this.tiles = [];
         this.collisionObjects = [];
+        this.enemies = [];
     }
 
     newInstance() {
@@ -42,12 +43,13 @@ class Grid {
     }
 
     loadRoom(lvl) {
-        let x,y,sprite,layout,isDoor
+        let x,y,sprite,layout,isDoor,chance;
         layout = lvlData['levels'][lvl]['layout'];
         x = null;
         y = null;
         sprite = null;
         isDoor = null;
+        chance = 7;
         for (let i=0; i<floor(layout['length']/this.aantalKolommen); i++) {
             y = i; 
             for (let j=0;j<this.aantalKolommen;j++) {
@@ -70,6 +72,10 @@ class Grid {
                 else {
                     sprite = window["tile" + String.fromCharCode(97 + Math.floor(Math.random()*4))];
                     this.tiles.push(new collisionObject(x,y,this.celGrootte,this.celGrootte,sprite));
+                    if (Math.floor(Math.random()*chance) == 1 && !game.bossroom && this.enemies.length < 4 + game.difficulty) {
+                        chance += 3;
+                        this.enemies.push(new enemy(x*this.celGrootte,y*this.celGrootte,game.difficulty,1));
+                    }
                 }
             }
         }

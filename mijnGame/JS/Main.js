@@ -13,16 +13,13 @@ function setup() {
     imageMode(CORNER);
     imgFilter(OPAQUE);
 
-    grid = new Grid(100,startscreen);
-    player = new Player(grid);
-
-    game = new BrunosKerker(player);
-
+    game = new BrunosKerker();
+    
     game.start();
 }
 
 function draw() {
-    game.draw()
+    game.draw();
 }
 
 function imgFilter(type) {
@@ -33,6 +30,5 @@ function imgFilter(type) {
 }
 
 function mousePressed() {
-    var k = new bullet(player.x, player.y);
-    game.kogels.push(k); 
+    game.bulletLoad();
 }

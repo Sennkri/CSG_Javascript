@@ -1,5 +1,5 @@
 class Player {
-    constructor(grid) {
+    constructor(grid,hp) {
         this.sprite = bruno;
         this.x = null;
         this.y = null;
@@ -15,6 +15,8 @@ class Player {
         this.doorL = false;
         this.doorR = false;
         this.doorD = false;
+
+        this.hp = hp;
 
         this.grid = grid;
     }

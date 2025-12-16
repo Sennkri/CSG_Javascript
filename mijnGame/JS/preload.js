@@ -4,6 +4,12 @@ var logoAnim = [];
 function preload() {
   bruno = loadImage('assets/sprites/bruno/bruno_portrait.png');
 
+  troonBoven = loadImage('assets/sprites/bruno/bruno_portrait.png');
+  troonOnder1 = loadImage('assets/sprites/bruno/bruno_portrait.png');
+  troonOnder2 = loadImage('assets/sprites/bruno/bruno_portrait.png');
+
+  lemoon = loadImage('assets/sprites/bruno/image.png');
+
   //sprites
   playerU = loadImage('assets/sprites/player/U.png');
   playerUL = loadImage('assets/sprites/player/UL.png');

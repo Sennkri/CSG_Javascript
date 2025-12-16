@@ -1,12 +1,14 @@
 class enemy {
-    constructor(x, y) {
+    constructor(x, y, diff,hp) {
         this.x = x;
-        this.y = y; 
-        this.color = "red";
+        this.y = y;
+        this.w = 100;
+        this.h = 100; 
+        this.hp = (diff + 1)*hp
+        this.enemyBullets = [];
     }
 
-    tekenEnemy() {
-        fill(this.color);     
-        image(jos,this.x - 50,this.y - 50,100,100);
+    draw() {
+        image(lemoon,this.x+game.grid.x,this.y+game.grid.y,this.w,this.h);
     }
 }

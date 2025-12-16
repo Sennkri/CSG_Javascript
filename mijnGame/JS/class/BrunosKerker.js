@@ -1,9 +1,9 @@
 class BrunosKerker {
-    constructor(player) {
-        this.player = player;
-        this.grid = player.grid;
+    constructor() {
+        this.grid = new Grid(100,startscreen);
+        this.player = new Player(this.grid,100);
 
-        this.instnaceOrder = [0,1,1,2,3,4];
+        this.instnaceOrder = [0,2,2,0,4];
         this.gridWidth = null;
         this.gridHeight = null;
         this.bossroom = null;
@@ -16,9 +16,12 @@ class BrunosKerker {
         this.difficulty = 0;
         this.logoFrame = 0;
         this.creditScreen = false;
+        this.deathScreen = false;
         this.creditY = 700;
+        this.roomNumber = 1;
 
-        this.kogels = [];
+        this.bullets = [];
+
     }
 
     start() {
@@ -28,12 +31,12 @@ class BrunosKerker {
     }
 
     draw() {
-        if (this.initialised && !this.creditScreen) {
+        if (this.initialised && !this.creditScreen && !this.deathScreen) {
             this.move();
             window["room" + this.difficulty].setVolume(0.3);
             window["room" + this.difficulty].playMode('untilDone');
             window["room" + this.difficulty].play();
-            if (keyIsDown(98) && !this.instanceCleared) {
+            if ((keyIsDown(98) || this.grid.enemies.length == 0) && !this.instanceCleared) {
                 this.instanceCleared = true;
                 this.instanceInList ++;
             }
@@ -50,21 +53,31 @@ class BrunosKerker {
                 }
                 this.room = this.instnaceOrder[this.instanceInList];
                 this.newInstance();
+
             }
             this.drawInstance();
-            for (let k of this.kogels) {
-                k.spawnBullet();
-            }
+
+            text("HP: " + this.player.hp, 50, 25);
+            text("Room " + this.roomNumber, 850, 25);
+
             this.player.load();
         }
 
-        else if (!this.initialised && this.creditScreen) {
+        else if (!this.initialised && this.creditScreen && !this.deathScreen) {
             creditsMusic.setVolume(0.3)
             creditsMusic.playMode('untilDone');
             creditsMusic.play();
             background(0);
             text(credits.join('\n'),450,this.creditY);
             this.creditY-= .3;
+        }
+
+        else if (!this.initialised && !this.creditScreen && this.deathScreen) {
+            creditsMusic.setVolume(0.3)
+            creditsMusic.playMode('untilDone');
+            creditsMusic.play();
+            background(0);
+            text("You Died", 450, 350);
         }
 
         else {
@@ -85,7 +98,7 @@ class BrunosKerker {
     }
 
     move() {
-        if ((keyIsDown(65) || keyIsDown(LEFT_ARROW)) && !this.player.checkCollisionL(this.grid.celGrootte,this.grid.x,grid.y)) {
+        if ((keyIsDown(65) || keyIsDown(LEFT_ARROW)) && !this.player.checkCollisionL(this.grid.celGrootte,this.grid.x,this.grid.y)) {
             if (this.grid.x < this.player.x - this.player.cameraMarginH && this.grid.x + this.grid.width >= this.player.x + this.player.cameraMarginH) {
                 this.grid.x += this.grid.step;
             }
@@ -112,7 +125,7 @@ class BrunosKerker {
             }
         }
 
-        if ((keyIsDown(83) || keyIsDown(DOWN_ARROW)) && !player.checkCollisionD(this.grid.celGrootte,this.grid.x,this.grid.y)) {
+        if ((keyIsDown(83) || keyIsDown(DOWN_ARROW)) && !this.player.checkCollisionD(this.grid.celGrootte,this.grid.x,this.grid.y)) {
             if (this.grid.y + this.grid.height > this.player.y + this.player.cameraMarginV && this.grid.y <= this.player.y - this.player.cameraMarginV) {
                 this.grid.y -= this.grid.step;
             }
@@ -152,6 +165,8 @@ class BrunosKerker {
 
         this.grid.collisionObjects.length = 0;
         this.grid.tiles.length = 0;
+        this.grid.enemies.length = 0;
+        this.bullets.length = 0;
         this.grid.loadRoom(this.room);
         this.startPos(lvlData['levels'][this.room]['startpositions'][this.player.recentDoor]['x'],lvlData['levels'][this.room]['startpositions'][this.player.recentDoor]['y']);
     }
@@ -198,5 +213,43 @@ class BrunosKerker {
         for(var b = 0; b < this.grid.collisionObjects.length ; b++) {
             this.grid.collisionObjects[b].draw(this.grid.celGrootte,this.grid.x,this.grid.y);
         }
+        for(var e = 0; e < this.grid.enemies.length ; e++) {
+            this.enemyBulletLoad();
+            for(var b = 0;b<this.grid.enemies[e].enemyBullets.length;b++) {
+                this.grid.enemies[e].enemyBullets[b].spawnBullet();
+                if(this.grid.enemies[e].enemyBullets[b].hit) this.grid.enemies[e].enemyBullets.splice(b,1);
+            }
+            this.grid.enemies[e].draw();
+        }
+        for(var b = 0;b<this.bullets.length;b++) {
+            this.bullets[b].spawnBullet();
+            if(this.bullets[b].hit) this.bullets.splice(b,1);
+        }
+    }
+
+    bulletLoad() {
+        if (this.initialised && !this.creditScreen && !this.deathScreen) {
+            this.bullets.push(new bullet(game.player.x, game.player.y,30,mouseX,mouseY,30,true));
+        }
+
+        if (this.bullets.length > 20) {
+            this.bullets.splice(0,1);
+        }
+    }
+
+    enemyBulletLoad() {
+        let enemies = this.grid.enemies;
+        if (this.initialised && !this.creditScreen && !this.deathScreen) {
+            for(var e = 0; e < enemies.length ; e++) {
+                if(Math.floor(Math.random()*300) == 0) {
+                    enemies[e].enemyBullets.push(new bullet(enemies[e].x,enemies[e].y,30,game.player.x+50,game.player.y+50,30,false));
+                }
+            }
+        }
+    }
+
+    death() {
+        this.initialised = false;
+        this.deathScreen = true;
     }
 }
