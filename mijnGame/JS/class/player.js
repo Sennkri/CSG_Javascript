@@ -1,6 +1,6 @@
 class Player {
-    constructor(sprite,grid) {
-        this.sprite = sprite;
+    constructor(grid) {
+        this.sprite = bruno;
         this.x = null;
         this.y = null;
         this.step = this.size/8;
@@ -24,9 +24,30 @@ class Player {
         this.y = y;
     }
 
+    playerSprite() {
+        let w = this.grid.width;
+        let h = this.grid.height;
+        let dx = constrain((constrain(mouseX,w-w,w) - this.x + 450 - this.size),0,w);
+        let dy = constrain((constrain(mouseY,0,h) - this.y +350 - this.size),0,h);
+        let col = Math.min(2, Math.floor(dx / (w/3)));
+        let row = Math.min(2, Math.floor(dy / (h/3)));
+        let map = [
+            ['UL','U','UR'],
+            ['L','M','R'],
+            ['DL','D','DR']
+        ];
+
+        if (map[row][col] !== 'M') {
+            this.sprite = window['player'+map[row][col]];
+        }
+
+    }
+
     load() {
+        this.playerSprite();
         image(this.sprite, this.x, this.y, this.size, this.size);
     }
+
 
     newInstance(bs) {
         this.step = this.size/8;

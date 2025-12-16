@@ -16,7 +16,9 @@ class BrunosKerker {
         this.difficulty = 0;
         this.logoFrame = 0;
         this.creditScreen = false;
-        this.creditY = 500;
+        this.creditY = 700;
+
+        this.kogels = [];
     }
 
     start() {
@@ -31,11 +33,11 @@ class BrunosKerker {
             window["room" + this.difficulty].setVolume(0.3);
             window["room" + this.difficulty].playMode('untilDone');
             window["room" + this.difficulty].play();
-            if (keyIsDown(32) && !this.instanceCleared) {
+            if (keyIsDown(98) && !this.instanceCleared) {
                 this.instanceCleared = true;
                 this.instanceInList ++;
             }
-            if ((keyIsDown(13) && this.instanceCleared)||(this.instanceCleared && this.player.doorCollisionCheck())) {
+            if ((keyIsDown(97) && this.instanceCleared)||(this.instanceCleared && this.player.doorCollisionCheck())) {
                 if (this.instanceInList >= this.instnaceOrder.length) {
                     this.instanceInList = 0;
                     window["room" + this.difficulty].stop();
@@ -43,19 +45,26 @@ class BrunosKerker {
                     if (this.difficulty >=3) {
                         this.initialised = false;
                         this.creditScreen = true;
+                        background(0)
                     }
                 }
                 this.room = this.instnaceOrder[this.instanceInList];
                 this.newInstance();
             }
             this.drawInstance();
+            for (let k of this.kogels) {
+                k.spawnBullet();
+            }
             this.player.load();
         }
 
         else if (!this.initialised && this.creditScreen) {
+            creditsMusic.setVolume(0.3)
+            creditsMusic.playMode('untilDone');
+            creditsMusic.play();
             background(0);
             text(credits.join('\n'),450,this.creditY);
-            this.creditY--;
+            this.creditY-= .3;
         }
 
         else {
@@ -76,7 +85,7 @@ class BrunosKerker {
     }
 
     move() {
-        if (keyIsDown(65) && !this.player.checkCollisionL(this.grid.celGrootte,this.grid.x,grid.y)) {
+        if ((keyIsDown(65) || keyIsDown(LEFT_ARROW)) && !this.player.checkCollisionL(this.grid.celGrootte,this.grid.x,grid.y)) {
             if (this.grid.x < this.player.x - this.player.cameraMarginH && this.grid.x + this.grid.width >= this.player.x + this.player.cameraMarginH) {
                 this.grid.x += this.grid.step;
             }
@@ -85,7 +94,7 @@ class BrunosKerker {
             }
         }
 
-        if (keyIsDown(68) && !this.player.checkCollisionR(this.grid.celGrootte,this.grid.x,this.grid.y)) {
+        if ((keyIsDown(68) || keyIsDown(RIGHT_ARROW)) && !this.player.checkCollisionR(this.grid.celGrootte,this.grid.x,this.grid.y)) {
             if (this.grid.x + this.grid.width > this.player.x + this.player.cameraMarginH && this.grid.x <= this.player.x - this.player.cameraMarginH) {
                 this.grid.x -= this.grid.step;
             }
@@ -94,7 +103,7 @@ class BrunosKerker {
             }
         }
 
-        if (keyIsDown(87) && !this.player.checkCollisionU(this.grid.celGrootte,this.grid.x,this.grid.y)) {
+        if ((keyIsDown(87) || keyIsDown(UP_ARROW)) && !this.player.checkCollisionU(this.grid.celGrootte,this.grid.x,this.grid.y)) {
             if (this.grid.y < this.player.y - this.player.cameraMarginV && this.grid.y + this.grid.height >= this.player.y + this.player.cameraMarginV) {
                 this.grid.y += this.grid.step;
             }
@@ -103,7 +112,7 @@ class BrunosKerker {
             }
         }
 
-        if (keyIsDown(83) && !player.checkCollisionD(this.grid.celGrootte,this.grid.x,this.grid.y)) {
+        if ((keyIsDown(83) || keyIsDown(DOWN_ARROW)) && !player.checkCollisionD(this.grid.celGrootte,this.grid.x,this.grid.y)) {
             if (this.grid.y + this.grid.height > this.player.y + this.player.cameraMarginV && this.grid.y <= this.player.y - this.player.cameraMarginV) {
                 this.grid.y -= this.grid.step;
             }

@@ -14,7 +14,7 @@ function setup() {
     imgFilter(OPAQUE);
 
     grid = new Grid(100,startscreen);
-    player = new Player(bruno,grid);
+    player = new Player(grid);
 
     game = new BrunosKerker(player);
 
@@ -30,4 +30,9 @@ function imgFilter(type) {
     for(var i=0;i<imgList.length;i++) {
         imgList[i].filter(type);
     }
+}
+
+function mousePressed() {
+    var k = new bullet(player.x, player.y);
+    game.kogels.push(k); 
 }

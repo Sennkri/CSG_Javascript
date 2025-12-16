@@ -3,9 +3,18 @@ var logoAnim = [];
 
 function preload() {
   bruno = loadImage('assets/sprites/bruno/bruno_portrait.png');
-  jos = loadImage('assets/sprites/Jos/pixelJos.png');
 
-
+  //sprites
+  playerU = loadImage('assets/sprites/player/U.png');
+  playerUL = loadImage('assets/sprites/player/UL.png');
+  playerUR = loadImage('assets/sprites/player/UR.png');
+  playerL = loadImage('assets/sprites/player/L.png');
+  playerR = loadImage('assets/sprites/player/R.png');
+  playerD = loadImage('assets/sprites/player/D.png');
+  playerDL = loadImage('assets/sprites/player/DL.png');
+  playerDR = loadImage('assets/sprites/player/DR.png');
+  bulletSprite = loadImage('assets/sprites/bullet.png');
+  
   // walls
   wall_1 = loadImage('assets/walls/cornerUL.png');
   wall_2a = loadImage('assets/walls/wallUa.png');
@@ -50,6 +59,7 @@ function preload() {
   room1 = loadSound('assets/sounds/music/room2');
   room2 = loadSound('assets/sounds/music/room3');
   ambience1 = loadSound('assets/sounds/startscreen');
+  creditsMusic = loadSound('assets/sounds/music/credits');
 
 // strings
   credits = loadStrings('assets/credits.txt');
